@@ -175,12 +175,13 @@ function RightCard({ icon: Icon, title, desc, badge }: { icon: React.ComponentTy
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-2xl bg-white border border-stone-200 p-6">
+    <div className="rounded-2xl bg-white border border-stone-200 p-6 hover:border-amber-400 transition-colors">
       <div className="text-3xl font-bold tracking-tight text-stone-900">{value}</div>
       <div className="mt-1 text-sm text-stone-500">{label}</div>
     </div>
   );
 }
+
 
 /* ─── Hipótesis ─── */
 function Hipotesis() {

@@ -1,10 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Scale, ShieldCheck, BookOpen, Gavel, Quote, ChevronDown, Search,
   Users, AlertTriangle, Sparkles, Landmark, FileText, HeartHandshake,
-  ArrowLeft, CheckCircle2, XCircle,
+  ArrowLeft, CheckCircle2, XCircle, Library, Phone, ExternalLink,
+  Lightbulb, RotateCcw,
 } from "lucide-react";
+
 
 export const Route = createFileRoute("/derechos")({
   component: DerechosPage,

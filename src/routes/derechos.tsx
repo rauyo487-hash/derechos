@@ -1,10 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Scale, ShieldCheck, BookOpen, Gavel, Quote, ChevronDown, Search,
   Users, AlertTriangle, Sparkles, Landmark, FileText, HeartHandshake,
-  ArrowLeft, CheckCircle2, XCircle,
+  ArrowLeft, CheckCircle2, XCircle, Library, Phone, ExternalLink,
+  Lightbulb, RotateCcw,
 } from "lucide-react";
+
 
 export const Route = createFileRoute("/derechos")({
   component: DerechosPage,
@@ -18,7 +20,7 @@ export const Route = createFileRoute("/derechos")({
   }),
 });
 
-type SectionId = "inicio" | "hipotesis" | "legal" | "sanciones" | "marco" | "testimonios";
+type SectionId = "inicio" | "hipotesis" | "legal" | "sanciones" | "marco" | "testimonios" | "apendice";
 
 const SECTIONS: { id: SectionId; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
   { id: "inicio", label: "Inicio", icon: Sparkles },
@@ -27,7 +29,9 @@ const SECTIONS: { id: SectionId; label: string; icon: React.ComponentType<{ clas
   { id: "sanciones", label: "Sanciones", icon: Gavel },
   { id: "marco", label: "Marco Teórico", icon: FileText },
   { id: "testimonios", label: "Testimonios", icon: Quote },
+  { id: "apendice", label: "Apéndice", icon: Library },
 ];
+
 
 function DerechosPage() {
   const [active, setActive] = useState<SectionId>("inicio");
@@ -73,14 +77,17 @@ function DerechosPage() {
         </nav>
       </header>
 
-      <main className="max-w-6xl mx-auto px-5 py-10 sm:py-14">
+      <main key={active} className="max-w-6xl mx-auto px-5 py-10 sm:py-14 animate-[fadeIn_0.35s_ease-out]">
         {active === "inicio" && <Inicio onNavigate={setActive} />}
         {active === "hipotesis" && <Hipotesis />}
         {active === "legal" && <BaseLegal />}
         {active === "sanciones" && <Sanciones />}
         {active === "marco" && <MarcoTeorico />}
         {active === "testimonios" && <Testimonios />}
+        {active === "apendice" && <Apendice />}
       </main>
+      <style>{`@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}`}</style>
+
 
       <footer className="border-t border-stone-200 mt-16">
         <div className="max-w-6xl mx-auto px-5 py-8 text-sm text-stone-500 flex flex-col sm:flex-row gap-2 sm:items-center sm:justify-between">
@@ -168,12 +175,13 @@ function RightCard({ icon: Icon, title, desc, badge }: { icon: React.ComponentTy
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-2xl bg-white border border-stone-200 p-6">
+    <div className="rounded-2xl bg-white border border-stone-200 p-6 hover:border-amber-400 transition-colors">
       <div className="text-3xl font-bold tracking-tight text-stone-900">{value}</div>
       <div className="mt-1 text-sm text-stone-500">{label}</div>
     </div>
   );
 }
+
 
 /* ─── Hipótesis ─── */
 function Hipotesis() {
@@ -550,3 +558,262 @@ function SectionHeader({ eyebrow, title, desc }: { eyebrow: string; title: strin
     </div>
   );
 }
+
+/* ─── Apéndice ─── */
+type GlossaryTerm = { term: string; def: string };
+const GLOSSARY: GlossaryTerm[] = [
+  { term: "Discriminación", def: "Toda distinción, exclusión o preferencia basada en motivos como género, etnia, religión o condición económica, que impida el ejercicio de un derecho." },
+  { term: "Servidumbre", def: "Condición de dependencia impuesta a una persona que la obliga a trabajar o vivir bajo el dominio de otra sin libertad real." },
+  { term: "Trata de personas", def: "Captación, traslado o retención de personas mediante engaño o coacción con fines de explotación laboral, sexual u otras." },
+  { term: "Dignidad humana", def: "Valor intrínseco de toda persona que fundamenta sus derechos y prohíbe cualquier trato que la reduzca a objeto." },
+  { term: "Pluriculturalidad", def: "Reconocimiento de la coexistencia de diversas culturas, idiomas y cosmovisiones dentro de un mismo Estado." },
+  { term: "Igualdad material", def: "Aquella que reconoce las desigualdades históricas y busca corregirlas, más allá de la simple igualdad formal ante la ley." },
+  { term: "PDH", def: "Procuraduría de los Derechos Humanos — institución del Estado que defiende y promueve los derechos humanos en Guatemala." },
+  { term: "Estereotipo étnico", def: "Idea generalizada, casi siempre negativa, atribuida a un grupo étnico que sirve como base para la discriminación." },
+];
+
+type Contacto = { name: string; phone: string; desc: string };
+const CONTACTOS: Contacto[] = [
+  { name: "PDH — Procuraduría de los Derechos Humanos", phone: "1555", desc: "Atención gratuita 24/7 para denunciar violaciones a derechos humanos." },
+  { name: "Ministerio Público — Denuncia trata", phone: "1572", desc: "Línea especializada contra trata de personas y explotación." },
+  { name: "PNC — Emergencias", phone: "110", desc: "Policía Nacional Civil para emergencias y denuncias inmediatas." },
+  { name: "Alba-Keneth (niñez)", phone: "1546", desc: "Alerta por desaparición de niñas, niños y adolescentes." },
+];
+
+type Quiz = { q: string; options: string[]; answer: number; explain: string };
+const QUIZ: Quiz[] = [
+  {
+    q: "¿Qué artículo de la Constitución establece la libertad e igualdad de todas las personas?",
+    options: ["Artículo 1", "Artículo 4", "Artículo 46", "Artículo 202"],
+    answer: 1,
+    explain: "El Artículo 4 de la Constitución declara que todos los seres humanos son libres e iguales en dignidad y derechos.",
+  },
+  {
+    q: "¿Cuál es la pena de prisión por el delito de trata de personas (Art. 202 Ter)?",
+    options: ["1 a 3 años", "3 a 6 años", "8 a 18 años", "20 a 30 años"],
+    answer: 2,
+    explain: "El Código Penal castiga la trata de personas con 8 a 18 años de prisión y multa de Q300,000 a Q500,000.",
+  },
+  {
+    q: "La discriminación en Guatemala es…",
+    options: ["Solo una falta de educación", "Un delito tipificado en el Código Penal", "Un asunto privado", "Una costumbre aceptada"],
+    answer: 1,
+    explain: "Desde 2002, la discriminación es un delito según el Artículo 202 Bis del Código Penal.",
+  },
+  {
+    q: "¿Cuál de estas NO es una señal de trabajo forzoso?",
+    options: ["Retención de documentos", "Salario justo y contrato claro", "Aislamiento del entorno familiar", "Deudas impagables con el empleador"],
+    answer: 1,
+    explain: "Un salario justo con contrato transparente es señal de un empleo legítimo, no de explotación.",
+  },
+];
+
+function Apendice() {
+  const [query, setQuery] = useState("");
+  const [openTerm, setOpenTerm] = useState<string | null>(null);
+  const filtered = useMemo(
+    () => GLOSSARY.filter((g) => (g.term + g.def).toLowerCase().includes(query.toLowerCase())),
+    [query]
+  );
+
+  return (
+    <div className="grid gap-10">
+      <SectionHeader eyebrow="Recursos" title="Apéndice" desc="Glosario, contactos de ayuda y una evaluación para poner a prueba lo aprendido." />
+
+      {/* Glosario */}
+      <section>
+        <h3 className="text-lg font-semibold text-stone-900 mb-4 flex items-center gap-2">
+          <BookOpen className="w-5 h-5 text-amber-600" /> Glosario interactivo
+        </h3>
+        <div className="relative mb-4">
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400" />
+          <input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Buscar un término…"
+            className="w-full pl-10 pr-4 py-3 rounded-full bg-white border border-stone-200 text-sm focus:outline-none focus:border-amber-500 focus:ring-4 focus:ring-amber-100 transition"
+          />
+        </div>
+        <div className="grid sm:grid-cols-2 gap-3">
+          {filtered.map((g) => {
+            const isOpen = openTerm === g.term;
+            return (
+              <button
+                key={g.term}
+                onClick={() => setOpenTerm(isOpen ? null : g.term)}
+                className={`text-left rounded-2xl border p-5 transition-all ${
+                  isOpen ? "bg-amber-50 border-amber-300" : "bg-white border-stone-200 hover:border-amber-300"
+                }`}
+              >
+                <div className="flex items-center justify-between gap-3">
+                  <span className="font-semibold text-stone-900">{g.term}</span>
+                  <ChevronDown className={`w-4 h-4 text-stone-400 transition-transform ${isOpen ? "rotate-180" : ""}`} />
+                </div>
+                {isOpen && <p className="mt-3 text-sm text-stone-700 leading-relaxed">{g.def}</p>}
+              </button>
+            );
+          })}
+          {filtered.length === 0 && (
+            <div className="sm:col-span-2 text-center py-10 text-stone-500 border border-dashed border-stone-300 rounded-2xl">
+              No se encontraron términos.
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Contactos */}
+      <section>
+        <h3 className="text-lg font-semibold text-stone-900 mb-4 flex items-center gap-2">
+          <Phone className="w-5 h-5 text-amber-600" /> Contactos de ayuda
+        </h3>
+        <div className="grid sm:grid-cols-2 gap-4">
+          {CONTACTOS.map((c) => (
+            <a
+              key={c.name}
+              href={`tel:${c.phone}`}
+              className="group rounded-2xl bg-white border border-stone-200 p-5 flex items-start gap-4 hover:border-amber-400 hover:shadow-md transition-all"
+            >
+              <div className="w-12 h-12 rounded-xl bg-amber-500 text-white flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                <Phone className="w-5 h-5" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="font-semibold text-stone-900 text-sm">{c.name}</div>
+                <div className="text-2xl font-bold text-amber-600 mt-0.5">{c.phone}</div>
+                <p className="text-xs text-stone-600 mt-1 leading-relaxed">{c.desc}</p>
+              </div>
+            </a>
+          ))}
+        </div>
+      </section>
+
+      {/* Quiz */}
+      <section>
+        <h3 className="text-lg font-semibold text-stone-900 mb-4 flex items-center gap-2">
+          <Lightbulb className="w-5 h-5 text-amber-600" /> Pon a prueba lo aprendido
+        </h3>
+        <QuizComponent />
+      </section>
+
+      {/* Fuentes */}
+      <section>
+        <h3 className="text-lg font-semibold text-stone-900 mb-4 flex items-center gap-2">
+          <ExternalLink className="w-5 h-5 text-amber-600" /> Fuentes consultadas
+        </h3>
+        <ul className="rounded-2xl bg-white border border-stone-200 divide-y divide-stone-100">
+          {[
+            "Constitución Política de la República de Guatemala (1985).",
+            "Código Penal de Guatemala — Decreto 17-73, Arts. 202 Bis y 202 Ter.",
+            "Acuerdos de Paz — Acuerdo sobre Identidad y Derechos de los Pueblos Indígenas (1995).",
+            "Procuraduría de los Derechos Humanos de Guatemala (PDH).",
+            "Curruchich, S. — «Pueblos» (canción).",
+            "Testimonios recopilados en medios de prensa nacional (2023–2024).",
+          ].map((f, i) => (
+            <li key={i} className="p-4 text-sm text-stone-700 flex gap-3">
+              <span className="text-amber-600 font-bold">{i + 1}.</span>
+              <span>{f}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      {/* Créditos */}
+      <div className="rounded-3xl bg-stone-900 text-white p-8 sm:p-10">
+        <div className="text-xs font-semibold text-amber-400 uppercase tracking-widest">Créditos</div>
+        <h3 className="mt-2 text-2xl font-bold tracking-tight">Seminaristas 2026 — Perito Contador</h3>
+        <p className="mt-3 text-stone-300 text-sm leading-relaxed">
+          Contenido investigado, redactado y presentado como parte del Seminario 2026. Página informativa; no constituye asesoría legal.
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function QuizComponent() {
+  const [answers, setAnswers] = useState<(number | null)[]>(() => QUIZ.map(() => null));
+  const answered = answers.filter((a) => a !== null).length;
+  const correct = answers.reduce<number>((acc, a, i) => (a === QUIZ[i].answer ? acc + 1 : acc), 0);
+  const done = answered === QUIZ.length;
+
+  const pick = (qi: number, oi: number) => {
+    if (answers[qi] !== null) return;
+    setAnswers((prev) => prev.map((a, i) => (i === qi ? oi : a)));
+  };
+  const reset = () => setAnswers(QUIZ.map(() => null));
+
+  return (
+    <div className="rounded-2xl bg-white border border-stone-200 p-6 sm:p-8">
+      <div className="flex items-center justify-between gap-4 mb-6">
+        <div className="text-sm text-stone-600">
+          Progreso: <span className="font-semibold text-stone-900">{answered}/{QUIZ.length}</span>
+          {done && <span className="ml-3">· Aciertos: <span className="font-semibold text-amber-600">{correct}/{QUIZ.length}</span></span>}
+        </div>
+        <button
+          onClick={reset}
+          className="inline-flex items-center gap-1.5 text-xs font-medium text-stone-500 hover:text-stone-900 transition-colors"
+        >
+          <RotateCcw className="w-3.5 h-3.5" /> Reiniciar
+        </button>
+      </div>
+      <div className="h-1.5 bg-stone-100 rounded-full overflow-hidden mb-8">
+        <div
+          className="h-full bg-amber-500 transition-all duration-500"
+          style={{ width: `${(answered / QUIZ.length) * 100}%` }}
+        />
+      </div>
+
+      <div className="grid gap-6">
+        {QUIZ.map((q, qi) => {
+          const chosen = answers[qi];
+          const isAnswered = chosen !== null;
+          return (
+            <div key={qi} className="grid gap-3">
+              <div className="font-medium text-stone-900">
+                <span className="text-amber-600 font-bold mr-2">{qi + 1}.</span>{q.q}
+              </div>
+              <div className="grid sm:grid-cols-2 gap-2">
+                {q.options.map((opt, oi) => {
+                  const isCorrect = oi === q.answer;
+                  const isChosen = chosen === oi;
+                  let cls = "border-stone-200 bg-white hover:border-amber-300";
+                  if (isAnswered) {
+                    if (isCorrect) cls = "border-green-500 bg-green-50 text-green-900";
+                    else if (isChosen) cls = "border-red-400 bg-red-50 text-red-900";
+                    else cls = "border-stone-200 bg-stone-50 text-stone-500";
+                  }
+                  return (
+                    <button
+                      key={oi}
+                      onClick={() => pick(qi, oi)}
+                      disabled={isAnswered}
+                      className={`text-left text-sm px-4 py-3 rounded-xl border transition-all flex items-center justify-between gap-2 ${cls}`}
+                    >
+                      <span>{opt}</span>
+                      {isAnswered && isCorrect && <CheckCircle2 className="w-4 h-4 text-green-600 shrink-0" />}
+                      {isAnswered && isChosen && !isCorrect && <XCircle className="w-4 h-4 text-red-500 shrink-0" />}
+                    </button>
+                  );
+                })}
+              </div>
+              {isAnswered && (
+                <div className="rounded-xl bg-amber-50/70 border border-amber-100 p-3 text-sm text-stone-800">
+                  <span className="font-semibold text-amber-800">Explicación: </span>{q.explain}
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {done && (
+        <div className="mt-8 rounded-2xl bg-stone-900 text-white p-6 text-center">
+          <Sparkles className="w-6 h-6 text-amber-400 mx-auto mb-2" />
+          <div className="text-lg font-semibold">
+            {correct === QUIZ.length ? "¡Perfecto! Dominas el tema." : correct >= QUIZ.length / 2 ? "¡Buen trabajo! Sigue reforzando." : "Repasa las secciones y vuelve a intentarlo."}
+          </div>
+          <div className="text-sm text-stone-300 mt-1">Obtuviste {correct} de {QUIZ.length} respuestas correctas.</div>
+        </div>
+      )}
+    </div>
+  );
+}
+

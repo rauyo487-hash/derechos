@@ -731,7 +731,7 @@ function Apendice() {
 function QuizComponent() {
   const [answers, setAnswers] = useState<(number | null)[]>(() => QUIZ.map(() => null));
   const answered = answers.filter((a) => a !== null).length;
-  const correct = answers.reduce((acc, a, i) => (a === QUIZ[i].answer ? acc + 1 : acc), 0);
+  const correct = answers.reduce<number>((acc, a, i) => (a === QUIZ[i].answer ? acc + 1 : acc), 0);
   const done = answered === QUIZ.length;
 
   const pick = (qi: number, oi: number) => {

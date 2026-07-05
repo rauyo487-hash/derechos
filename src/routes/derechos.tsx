@@ -77,14 +77,17 @@ function DerechosPage() {
         </nav>
       </header>
 
-      <main className="max-w-6xl mx-auto px-5 py-10 sm:py-14">
+      <main key={active} className="max-w-6xl mx-auto px-5 py-10 sm:py-14 animate-[fadeIn_0.35s_ease-out]">
         {active === "inicio" && <Inicio onNavigate={setActive} />}
         {active === "hipotesis" && <Hipotesis />}
         {active === "legal" && <BaseLegal />}
         {active === "sanciones" && <Sanciones />}
         {active === "marco" && <MarcoTeorico />}
         {active === "testimonios" && <Testimonios />}
+        {active === "apendice" && <Apendice />}
       </main>
+      <style>{`@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}`}</style>
+
 
       <footer className="border-t border-stone-200 mt-16">
         <div className="max-w-6xl mx-auto px-5 py-8 text-sm text-stone-500 flex flex-col sm:flex-row gap-2 sm:items-center sm:justify-between">

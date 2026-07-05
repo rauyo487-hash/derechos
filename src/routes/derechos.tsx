@@ -20,7 +20,7 @@ export const Route = createFileRoute("/derechos")({
   }),
 });
 
-type SectionId = "inicio" | "hipotesis" | "legal" | "sanciones" | "marco" | "testimonios";
+type SectionId = "inicio" | "hipotesis" | "legal" | "sanciones" | "marco" | "testimonios" | "apendice";
 
 const SECTIONS: { id: SectionId; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
   { id: "inicio", label: "Inicio", icon: Sparkles },
@@ -29,7 +29,9 @@ const SECTIONS: { id: SectionId; label: string; icon: React.ComponentType<{ clas
   { id: "sanciones", label: "Sanciones", icon: Gavel },
   { id: "marco", label: "Marco Teórico", icon: FileText },
   { id: "testimonios", label: "Testimonios", icon: Quote },
+  { id: "apendice", label: "Apéndice", icon: Library },
 ];
+
 
 function DerechosPage() {
   const [active, setActive] = useState<SectionId>("inicio");
